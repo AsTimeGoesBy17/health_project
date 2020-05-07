@@ -1,7 +1,22 @@
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+import pandas as pd
+
 from tkinter import Tk, Frame
 from tkinter.ttk import Label, Button
 
 LARGE_FONT = ('Verdana', 12)
+
+DATA = pd.read_csv('C:\Python38\programy\zdrowie\BMI.csv')
+
+def get_data_country(country):
+    x = DATA[DATA['COUNTRY'] == country]['YEAR']
+    y = DATA[DATA['COUNTRY'] == country]['VALUE']
+    return (x, y)
+
 
 class HealthApp(Tk):
 
@@ -56,7 +71,7 @@ class HomePage(Frame):
                         command=lambda: controller.show_frame(POLAND))
         button4.pack()
 
-        welcome_text = Label(self, text='hgfgh') #dpoisać potem
+        welcome_text = Label(self, text='Hello Fat People :)') #dpoisać potem
         welcome_text.pack()
 
 class WORLD(Frame):
@@ -72,6 +87,8 @@ class WORLD(Frame):
         button1 = Button(self, text="Home Page",
                         command=lambda: controller.show_frame(HomePage))
         button1.pack()
+
+
 
 class USA(Frame):
 
@@ -110,11 +127,19 @@ class POLAND(Frame):
         label = Label(self, text='POLAND', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        f = Figure(figsize=(5, 5), dpi=100)
+        a = f.add_subplot(111)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
         button1 = Button(self, text="Home Page",
                         command=lambda: controller.show_frame(HomePage))
         button1.pack()
 
+        (x, y) = get_data_country('POL')
+        a.plot(x, y)
+
 app = HealthApp()
-app.geometry('500x400')
 app.mainloop()
