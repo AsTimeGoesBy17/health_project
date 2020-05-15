@@ -17,6 +17,11 @@ def get_data_country(country):
     y = DATA[DATA['COUNTRY'] == country]['VALUE']
     return (x, y)
 
+def get_data_country_group(country_grp):
+    x = DATA[DATA['COUNTRY_GRP'] == country_grp]['YEAR']
+    y = DATA[DATA['COUNTRY_GRP'] == country_grp]['VALUE']
+    return (x, y)
+
 
 class HealthApp(Tk):
 
@@ -32,7 +37,7 @@ class HealthApp(Tk):
 
         self.frames = {}
 
-        for F in (HomePage, WORLD, USA, EU, POLAND):
+        for F in (HomePage, CENTRAL_ASIA, RUSSIA, EU, POLAND, DEUTCHLAND):
             frame = F(container, self)
             self.frames[F] = frame
 
@@ -54,12 +59,12 @@ class HomePage(Frame):
         label.pack(pady=10, padx=10)
 
 
-        button1 = Button(self, text="WORLD",
-                        command=lambda: controller.show_frame(WORLD))
+        button1 = Button(self, text="CENTRAL_ASIA",
+                        command=lambda: controller.show_frame(CENTRAL_ASIA))
         button1.pack()
 
-        button2 = Button(self, text="USA",
-                        command=lambda: controller.show_frame(USA))
+        button2 = Button(self, text="RUSSIA",
+                        command=lambda: controller.show_frame(RUSSIA))
         button2.pack()
 
 
@@ -71,38 +76,98 @@ class HomePage(Frame):
                         command=lambda: controller.show_frame(POLAND))
         button4.pack()
 
-        welcome_text = Label(self, text='Hello Fat People :)') #dpoisać potem
+
+        button5 = Button(self, text="DEUTCHLAND",
+                        command=lambda: controller.show_frame(DEUTCHLAND))
+        button5.pack()
+
+        home_page_text = """
+
+
+
+        Hello everyone :)
+
+        I'd like to present you a change of BMI rate in a few exemplary countries from 1975 to 2016.
+
+        Enjoy yourself while analysing figures.
+
+
+
+        """
+
+        welcome_text = Label(self, text=home_page_text) #dpoisać potem
+        label.configure(anchor="center")
         welcome_text.pack()
 
-class WORLD(Frame):
+class CENTRAL_ASIA(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
 
 
-        label = Label(self, text='WORLD', font=LARGE_FONT)
+        label = Label(self, text='CENTRAL_ASIA', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        f = Figure(figsize=(5, 5), dpi=100)
+        a = f.add_subplot(111)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
         button1 = Button(self, text="Home Page",
                         command=lambda: controller.show_frame(HomePage))
         button1.pack()
 
+        (x, y) = get_data_country_group('CARINFONET')
+        a.plot(x, y)
 
-
-class USA(Frame):
+class RUSSIA(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
 
 
-        label = Label(self, text='USA', font=LARGE_FONT)
+        label = Label(self, text='RUSSIA', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        f = Figure(figsize=(5, 5), dpi=100)
+        a = f.add_subplot(111)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
         button1 = Button(self, text="Home Page",
                         command=lambda: controller.show_frame(HomePage))
         button1.pack()
+
+        (x, y) = get_data_country('RUS')
+        a.plot(x, y)
+
+class DEUTCHLAND(Frame):
+
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+
+
+        label = Label(self, text='DEUTCHLAND', font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+
+        f = Figure(figsize=(5, 5), dpi=100)
+        a = f.add_subplot(111)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+
+        button1 = Button(self, text="Home Page",
+                        command=lambda: controller.show_frame(HomePage))
+        button1.pack()
+
+        (x, y) = get_data_country('DEU')
+        a.plot(x, y)
+
 
 class EU(Frame):
 
@@ -113,10 +178,19 @@ class EU(Frame):
         label = Label(self, text='EU', font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+        f = Figure(figsize=(5, 5), dpi=100)
+        a = f.add_subplot(111)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
         button1 = Button(self, text="Home Page",
                         command=lambda: controller.show_frame(HomePage))
         button1.pack()
+
+        (x, y) = get_data_country_group('EU_MEMBERS')
+        a.plot(x, y)
 
 class POLAND(Frame):
 
